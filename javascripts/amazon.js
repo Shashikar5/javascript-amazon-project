@@ -36,7 +36,7 @@ products.forEach((product) => {
         </div>
 
         <div class="product-quantity-container">
-            <select>
+            <select class = "js-quantity-selector-${product.id}">
                 <option selected value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -52,7 +52,7 @@ products.forEach((product) => {
 
         <div class="product-spacer"></div>
 
-        <div class="added-to-cart">
+        <div class="added-to-cart added-to-cart-${product.id}">
             <img src="images/icons/checkmark.png">
             Added
         </div>
@@ -89,16 +89,29 @@ addToCartButtons.forEach((addToCartButton, index) => {
 
         const productId = addToCartButton.dataset.productId;
 
+        //Getting the quantity from the select html attribute, we assign a unique class to the select attribute and get it
+        const quantityPerItem = Number(document.querySelector(`.js-quantity-selector-${productId}`).value);
+
+        /*After clicking add to cart button, Added message will come and disappear after 1 sec
+        In the CSS file, Added message opacity is set to 0 so, we assign a unique class to the message and access it using dom
+        We are also using setTimeOut to make the message disappear*/
+        const message = document.querySelector(`.added-to-cart-${productId}`);
+        message.style.opacity = 1;
+        setTimeout(() => {
+            message.style.opacity = 0;
+        },1000);
+
+        //if present in the cart, increase the quantity or else add to cart
         if(!presentInCart(productId))
         {
             cart.push({
                 id: productId,
-                quantity: 1
+                quantity: quantityPerItem
             });
         } 
         else 
         {
-            increaseQuantity(productId);
+            increaseQuantity(productId, quantityPerItem);
         }
         
         //cart.push(products[index]); Alternative way without data attribute, we use index and add the whole object to the cart
@@ -128,16 +141,14 @@ function presentInCart(productId){
     return isPresent;
 }
 
-function increaseQuantity(productId){
+function increaseQuantity(productId, quantityPerItem){
     cart.forEach((product) => {
         if(product.id === productId)
         {
-            product.quantity +=1;
+            product.quantity += quantityPerItem;
         }
     })
 }
-
-console.log('Hi');
 
 
 

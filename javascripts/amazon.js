@@ -3,33 +3,11 @@
     1.Save Data
     2.Generate HTML
     3.Make it interative
-*/
 
-const products = [{
-    image: 'images/products/athletic-cotton-socks-6-pairs.jpg',
-    productName: 'Black and Gray Athletic Cotton Socks - 6 Pairs',
-    rating: {
-        stars: 4.5,
-        count: 87
-    },
-    priceInCents: 1090
-},{
-    image: 'images/products/intermediate-composite-basketball.jpg',
-    productName: 'Intermediate Size Basketball',
-    rating: {
-        stars: 4.0,
-        count: 127
-    },
-    priceInCents: 2095
-},{
-    image: 'images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg',
-    productName: 'Adults Plain Cotton T-Shirt - 2 Pack',
-    rating: {
-        stars: 4.5,
-        count: 56
-    },
-    priceInCents: 799
-}];
+    For writing the script element, order matters. we cannot write the script element for looping and inserting HTML before the HTML class. it should be after.
+*/
+//In the script element in amazon.js, Products.js is created(Pls refer data/products.js for the array)
+
 
 let productsHTML = '';
 
@@ -42,7 +20,7 @@ products.forEach((product) => {
         </div>
 
         <div class="product-name limit-text-to-2-lines">
-            ${product.productName}
+            ${product.name}
         </div>
 
         <div class="product-rating-container">
@@ -54,7 +32,7 @@ products.forEach((product) => {
         </div>
 
         <div class="product-price">
-            $ ${(product.priceInCents/100).toFixed(2)}
+            $ ${(product.priceCents/100).toFixed(2)}
         </div>
 
         <div class="product-quantity-container">

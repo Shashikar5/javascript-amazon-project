@@ -57,14 +57,72 @@ products.forEach((product) => {
             Added
         </div>
 
-        <button class="add-to-cart-button button-primary">
+        <button class="add-to-cart-button button-primary js-add-to-cart"
+        data-product-id = "${product.id}">
             Add to Cart
         </button>
     </div>  
     `;
 });
 
-console.log(productsHTML);
+//console.log(productsHTML);
 
+// Inserting the HTML 
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
+
+/* 
+    Syntax for data attribute
+    1.it is a HTML attribute
+    2. have to start with data
+    3. then we can give it any name we want
+
+    it is defined in add-to-cart-button as data-product-id
+
+    To retrive it, we can access with .dataset.productId(it gets converted to camel case from kebab case) after using dom to get the HTML where the data attribute was written(For data-product-id)
+*/
+//Adding to Cart Logic - using closure method(Pls refer final todo list-12 in javascript project)
+const addToCartButtons = document.querySelectorAll('.js-add-to-cart');
+
+addToCartButtons.forEach((addToCartButton, index) => {
+    addToCartButton.addEventListener('click',() => {
+
+        const productId = addToCartButton.dataset.productId;
+
+        if(!presentInCart(productId))
+        {
+            cart.push({
+                id: productId,
+                quantity: 1
+            });
+        } 
+        else 
+        {
+            increaseQuantity(productId);
+        }
+        
+        //cart.push(products[index]); Alternative way without data attribute, we use index and add the whole object to the cart
+        console.log('Added Product');
+
+        console.log(cart);
+    });
+});
+
+function presentInCart(productId){
+    isPresent = false;
+    cart.forEach((product) => {
+        if(product.id === productId){
+            isPresent = true;
+        }
+    });
+    return isPresent;
+}
+
+function increaseQuantity(productId){
+    cart.forEach((product) => {
+        if(product.id === productId)
+        {
+            product.quantity +=1;
+        }
+    })
+}

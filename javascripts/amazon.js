@@ -102,9 +102,19 @@ addToCartButtons.forEach((addToCartButton, index) => {
         }
         
         //cart.push(products[index]); Alternative way without data attribute, we use index and add the whole object to the cart
-        console.log('Added Product');
+        //console.log('Added Product');
 
-        console.log(cart);
+
+        //For putting cart quantity in the header
+        let cartQuantity = 0;
+        cart.forEach((product) => {
+            cartQuantity += product.quantity;
+        });
+
+        //Setting the cart quantity in the header
+        document.querySelector('.js-cart-quantity').innerText = cartQuantity;
+        
+        //console.log(cart);
     });
 });
 
@@ -126,3 +136,10 @@ function increaseQuantity(productId){
         }
     })
 }
+
+console.log('Hi');
+
+
+
+
+

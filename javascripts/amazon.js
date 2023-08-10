@@ -8,6 +8,16 @@
 */
 //In the script element in amazon.js, Products.js is created(Pls refer data/products.js for the array)
 
+/* Using the script to load js files in the main HTML file can cause naming conflicts(2 same variables are declared). So, to solve      this, we use modules
+    Steps for creating a module / How get a variable out of the file without using script attribute
+    1. Add type = "module" attribute
+    2. Export the variable
+    3. Import the variable    
+    For Example: refer the cart variable in cart.js
+    
+    Modules will only work with live server. Going to a HTML and clicking will not cause module to work
+*/
+import {cart} from '../data/cart.js';
 
 let productsHTML = '';
 
@@ -84,7 +94,7 @@ document.querySelector('.js-products-grid').innerHTML = productsHTML;
 //Adding to Cart Logic - using closure method(Pls refer final todo list-12 in javascript project)
 const addToCartButtons = document.querySelectorAll('.js-add-to-cart');
 
-addToCartButtons.forEach((addToCartButton, index) => {
+addToCartButtons.forEach((addToCartButton) => {
     addToCartButton.addEventListener('click',() => {
 
         const productId = addToCartButton.dataset.productId;
@@ -132,7 +142,7 @@ addToCartButtons.forEach((addToCartButton, index) => {
 });
 
 function presentInCart(productId){
-    isPresent = false;
+    let isPresent = false;
     cart.forEach((product) => {
         if(product.id === productId){
             isPresent = true;

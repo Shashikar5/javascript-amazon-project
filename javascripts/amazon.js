@@ -18,6 +18,7 @@
     Modules will only work with live server. Going to a HTML and clicking will not cause module to work
 */
 import {cart} from '../data/cart.js';
+import {products} from '../data/products.js';
 
 let productsHTML = '';
 

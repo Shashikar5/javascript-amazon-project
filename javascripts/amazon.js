@@ -17,7 +17,7 @@
     
     Modules will only work with live server. Going to a HTML and clicking will not cause module to work
 */
-import {cart} from '../data/cart.js';
+import {cart, addToCart} from '../data/cart.js';
 import {products} from '../data/products.js';
 
 let productsHTML = '';
@@ -95,7 +95,7 @@ document.querySelector('.js-products-grid').innerHTML = productsHTML;
 //Adding to Cart Logic - using closure method(Pls refer final todo list-12 in javascript project)
 const addToCartButtons = document.querySelectorAll('.js-add-to-cart');
 
-addToCartButtons.forEach((addToCartButton) => {
+addToCartButtons.forEach((addToCartButton, index) => {
     addToCartButton.addEventListener('click',() => {
 
         const productId = addToCartButton.dataset.productId;
@@ -103,64 +103,39 @@ addToCartButtons.forEach((addToCartButton) => {
         //Getting the quantity from the select html attribute, we assign a unique class to the select attribute and get it
         const quantityPerItem = Number(document.querySelector(`.js-quantity-selector-${productId}`).value);
 
-        /*After clicking add to cart button, Added message will come and disappear after 1 sec
-        In the CSS file, Added message opacity is set to 0 so, we assign a unique class to the message and access it using dom
-        We are also using setTimeOut to make the message disappear*/
-        const message = document.querySelector(`.added-to-cart-${productId}`);
-        message.style.opacity = 1;
-        setTimeout(() => {
-            message.style.opacity = 0;
-        },1000);
+        displayAddedText(productId);
 
-        //if present in the cart, increase the quantity or else add to cart
-        if(!presentInCart(productId))
-        {
-            cart.push({
-                id: productId,
-                quantity: quantityPerItem
-            });
-        } 
-        else 
-        {
-            increaseQuantity(productId, quantityPerItem);
-        }
-        
-        //cart.push(products[index]); Alternative way without data attribute, we use index and add the whole object to the cart
-        //console.log('Added Product');
+        /*  cart.push(products[index]); Alternative way without data attribute, we use index and add the whole object to the cart
+            console.log('Added Product'); - Without using productId
+        */
+        addToCart(productId, quantityPerItem);
 
-
-        //For putting cart quantity in the header
-        let cartQuantity = 0;
-        cart.forEach((product) => {
-            cartQuantity += product.quantity;
-        });
-
-        //Setting the cart quantity in the header
-        document.querySelector('.js-cart-quantity').innerText = cartQuantity;
+        /*For putting total cart quantity in the header. we are caculating total quantity by adding all the individual quantities in the cart*/
+        caculateTotalCartQuantity();
         
         //console.log(cart);
     });
 });
 
-function presentInCart(productId){
-    let isPresent = false;
+/*After clicking add to cart button, Added message will come and disappear after 1 sec
+In the CSS file, Added message opacity is set to 0 so, we assign a unique class to the message and access it using dom and make opacity 1. We are also using setTimeOut to make the message disappear*/
+function displayAddedText(productId){
+    const message = document.querySelector(`.added-to-cart-${productId}`);
+    message.style.opacity = 1;
+    setTimeout(() => {
+        message.style.opacity = 0;
+    },1000);
+}
+
+function caculateTotalCartQuantity(){
+    let cartQuantity = 0;
     cart.forEach((product) => {
-        if(product.id === productId){
-            isPresent = true;
-        }
+        cartQuantity += product.quantity;
     });
-    return isPresent;
+    
+    //Setting the cart quantity in the header
+    document.querySelector('.js-cart-quantity').innerText = cartQuantity;
 }
-
-function increaseQuantity(productId, quantityPerItem){
-    cart.forEach((product) => {
-        if(product.id === productId)
-        {
-            product.quantity += quantityPerItem;
-        }
-    })
-}
-
 
 
 

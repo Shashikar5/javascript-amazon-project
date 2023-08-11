@@ -110,6 +110,9 @@ addToCartButtons.forEach((addToCartButton, index) => {
         */
         addToCart(productId, quantityPerItem);
 
+        //Saving the cart in Local Storage
+        localStorage.setItem('cart',JSON.stringify(cart));
+
         /*For putting total cart quantity in the header. we are caculating total quantity by adding all the individual quantities in the cart*/
         caculateTotalCartQuantity();
         

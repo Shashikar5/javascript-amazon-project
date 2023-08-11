@@ -1,11 +1,15 @@
-import {cart} from '../data/cart.js';
 import {products} from '../data/products.js';
 
 let cartSummaryHTML = '';
 
+//Accessing the cart from local storage
+let cart = JSON.parse(localStorage.getItem('cart'));
+
+//console.log(cart);
+
 cart.forEach((product) => {
   let requiredProduct = findProduct(product.id);
-  console.log(requiredProduct);
+  //console.log(requiredProduct);
   
   cartSummaryHTML += `
     <div class="cart-item-container">

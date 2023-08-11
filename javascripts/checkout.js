@@ -1,4 +1,5 @@
 import {products} from '../data/products.js';
+import {formatCurrency } from './utils/cost.js';
 
 let cartSummaryHTML = '';
 
@@ -6,6 +7,8 @@ let cartSummaryHTML = '';
 let cart = JSON.parse(localStorage.getItem('cart'));
 
 //console.log(cart);
+
+/* For input type=radio selectors(HTML), we can click one checkbox at a time if the input attributes have the same name, So for different products, we should have a unique radio selector name = "" to solve this problem*/
 
 cart.forEach((product) => {
   let requiredProduct = findProduct(product.id);
@@ -26,7 +29,7 @@ cart.forEach((product) => {
             ${requiredProduct.name}
           </div>
           <div class="product-price">
-            ${(requiredProduct.priceCents/100).toFixed(2)}
+            ${formatCurrency(requiredProduct.priceCents)}
           </div>
           <div class="product-quantity">
             <span>
@@ -48,7 +51,7 @@ cart.forEach((product) => {
           <div class="delivery-option">
             <input type="radio" checked
               class="delivery-option-input"
-              name="delivery-option-1">
+              name="delivery-option-${product.id}">
             <div>
               <div class="delivery-option-date">
                 Tuesday, June 21
@@ -61,7 +64,7 @@ cart.forEach((product) => {
           <div class="delivery-option">
             <input type="radio"
               class="delivery-option-input"
-              name="delivery-option-1">
+              name="delivery-option-${product.id}">
             <div>
               <div class="delivery-option-date">
                 Wednesday, June 15
@@ -74,7 +77,7 @@ cart.forEach((product) => {
           <div class="delivery-option">
             <input type="radio"
               class="delivery-option-input"
-              name="delivery-option-1">
+              name="delivery-option-${product.id}">
             <div>
               <div class="delivery-option-date">
                 Monday, June 13

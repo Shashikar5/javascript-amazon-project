@@ -52,5 +52,15 @@ export function removeProductFromCart(productId){
   saveToLocalStorage();
 }
 
+export function caculateCartQuantity(){
+  let cartQuantity = 0;
+  cart.forEach((cartItem) => {
+    cartQuantity += cartItem.quantity;
+  });
+  saveToLocalStorage();
+  return cartQuantity;
+}
+
+
 
 

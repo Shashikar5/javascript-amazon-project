@@ -20,6 +20,7 @@
 import {cart, addToCart} from '../data/cart.js';
 import {products} from '../data/products.js';
 import {formatCurrency} from './utils/cost.js';
+import { caculateCartQuantity } from '../data/cart.js';
 
 /* one dot means that it will go inside current folder/folder-inside-that/file   , two dot means outside-current-folder/folder-inside-that/file */
 
@@ -131,10 +132,7 @@ function displayAddedText(productId){
 }
 
 function caculateTotalCartQuantity(){
-    let cartQuantity = 0;
-    cart.forEach((product) => {
-        cartQuantity += product.quantity;
-    });
+    let cartQuantity = caculateCartQuantity();
     
     //Setting the cart quantity in the header
     document.querySelector('.js-cart-quantity').innerText = cartQuantity;

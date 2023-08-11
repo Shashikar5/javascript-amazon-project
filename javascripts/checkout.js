@@ -1,6 +1,6 @@
 import {products} from '../data/products.js';
 import {formatCurrency } from './utils/cost.js';
-import { cart, removeProductFromCart } from '../data/cart.js';
+import { cart, removeProductFromCart, caculateCartQuantity} from '../data/cart.js';
 
 let cartSummaryHTML = '';
 
@@ -93,6 +93,9 @@ cart.forEach((product) => {
 
 //console.log(cartSummaryHTML);
 
+//Display total cart quantity in the checkout.html page
+displayCartQuantityInHeader();
+
 //Setting the HTML in the checkout page(For Products)
 document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
 
@@ -117,5 +120,13 @@ deleteButtons.forEach((deleteButton) => {
     /* we are using the unique product-id for every product and removing the product using that id from the final HTML*/
     let cartItem = document.querySelector(`.container-${productId}`);
     cartItem.remove();
+    //For displaying cart quantity in header after deleting
+    displayCartQuantityInHeader();
   });
-})
+});
+
+function displayCartQuantityInHeader(){
+  let cartQuantity = caculateCartQuantity();
+  document.querySelector('.js-return-to-home-link').innerHTML = `${cartQuantity} Items`;
+}
+

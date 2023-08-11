@@ -1,10 +1,8 @@
 import {products} from '../data/products.js';
 import {formatCurrency } from './utils/cost.js';
+import { cart, removeProductFromCart } from '../data/cart.js';
 
 let cartSummaryHTML = '';
-
-//Accessing the cart from local storage
-let cart = JSON.parse(localStorage.getItem('cart'));
 
 //console.log(cart);
 
@@ -15,7 +13,7 @@ cart.forEach((product) => {
   //console.log(requiredProduct);
   
   cartSummaryHTML += `
-    <div class="cart-item-container">
+    <div class="cart-item-container container-${product.id}">
       <div class="delivery-date">
         Delivery date: Tuesday, June 21
       </div>
@@ -38,7 +36,7 @@ cart.forEach((product) => {
             <span class="update-quantity-link link-primary">
               Update
             </span>
-            <span class="delete-quantity-link link-primary">
+            <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${product.id}">
               Delete
             </span>
           </div>
@@ -108,3 +106,16 @@ function findProduct(productId){
   });
   return requiredProduct;
 }
+
+//Using closure method and dataset attribute - for delete button(Similar logic to add to cart button)
+let deleteButtons = document.querySelectorAll('.js-delete-link');
+deleteButtons.forEach((deleteButton) => {
+  deleteButton.addEventListener('click',() => {
+    let productId = deleteButton.dataset.productId;
+    removeProductFromCart(productId);
+    //console.log(cart);
+    /* we are using the unique product-id for every product and removing the product using that id from the final HTML*/
+    let cartItem = document.querySelector(`.container-${productId}`);
+    cartItem.remove();
+  });
+})

@@ -1,4 +1,9 @@
-export let cart = [];
+export let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+//Function to save cart to local storage
+function saveToLocalStorage(){
+  localStorage.setItem('cart',JSON.stringify(cart));
+}
 
 //if present in the cart, increase the quantity or else add to cart
 export function addToCart(productId, quantityPerItem){
@@ -13,6 +18,8 @@ export function addToCart(productId, quantityPerItem){
   {
     increaseQuantity(productId, quantityPerItem);
   }
+
+  saveToLocalStorage();
 }
 
 function presentInCart(productId){
@@ -32,6 +39,17 @@ function increaseQuantity(productId, quantityPerItem){
       product.quantity += quantityPerItem;
     }
   })
+}
+
+export function removeProductFromCart(productId){
+  let newCart = [];
+  cart.forEach((product) => {
+    if(product.id !== productId){
+      newCart.push(product);
+    }
+  });
+  cart = newCart;
+  saveToLocalStorage();
 }
 
 

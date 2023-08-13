@@ -122,6 +122,16 @@ deleteButtons.forEach((deleteButton) => {
     cartItem.remove();
     //For displaying cart quantity in header after deleting
     displayCartQuantityInHeader();
+
+    /*Updating the costs when deleting a product*/
+    //Total Items Cost Logic(No tax and shipping included) 
+    let itemCost = setItemsCost();
+
+    //Setting the items cost
+    document.querySelector('.js-items-cost').innerHTML = `$${itemCost.toFixed(2)}`;
+
+    //Set all other costs in the starting - when shipping rates are 0
+    setAllCosts(itemCost);
   });
 });
 
@@ -134,18 +144,13 @@ function displayCartQuantityInHeader(){
 }
 
 //Total Items Cost Logic(No tax and shipping included) 
-let itemCost = 0;
-cart.forEach((cartItem) => {
-  let productId = cartItem.id;
-  let product = findProduct(productId);
-  let productCost = formatCurrency(product.priceCents);
-  itemCost += (productCost * cartItem.quantity);
-});
+let itemCost = setItemsCost();
+
 //Setting the items cost
 document.querySelector('.js-items-cost').innerHTML = `$${itemCost.toFixed(2)}`;
+
 //Set all other costs in the starting - when shipping rates are 0
 setAllCosts(itemCost);
-
 
 
 //Cost logic - when radio buttons are clicked(Shipping dates are selected)
@@ -185,4 +190,16 @@ function setAllCosts(itemCost)
 
   //Calculating the total cost
   document.querySelector('.js-total-cost').innerHTML = `$${(totalBeforeTax + taxAmount).toFixed(2)}`;
+}
+
+function setItemsCost()
+{
+  let itemCost = 0;
+  cart.forEach((cartItem) => {
+    let productId = cartItem.id;
+    let product = findProduct(productId);
+    let productCost = formatCurrency(product.priceCents);
+    itemCost += (productCost * cartItem.quantity);
+  });
+  return itemCost;
 }

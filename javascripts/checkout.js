@@ -127,7 +127,10 @@ deleteButtons.forEach((deleteButton) => {
 
 function displayCartQuantityInHeader(){
   let cartQuantity = caculateCartQuantity();
+  //In checkout.html header
   document.querySelector('.js-return-to-home-link').innerHTML = `${cartQuantity} Items`;
+  //In checkout.html order summary - when billing
+  document.querySelector('.js-items-quantity').innerHTML = `Items(${cartQuantity}):`;
 }
 
 //Total Items Cost Logic(No tax and shipping included) 
@@ -140,11 +143,8 @@ cart.forEach((cartItem) => {
 });
 //Setting the items cost
 document.querySelector('.js-items-cost').innerHTML = `$${itemCost.toFixed(2)}`;
-//When shipping rates are free, total-before-tax = items-cost
-document.querySelector('.js-total-before-tax').innerHTML = `$${itemCost.toFixed(2)}`;
-//Calculating the tax(10 percent)
-let taxAmount = (itemCost/10);
-document.querySelector('.js-tax-amount').innerHTML = `$${taxAmount.toFixed(2)}`;
+//Set all other costs in the starting - when shipping rates are 0
+setAllCosts(itemCost);
 
 
 
@@ -155,29 +155,34 @@ document.querySelector('.js-tax-amount').innerHTML = `$${taxAmount.toFixed(2)}`;
 let inputShippingButtons = document.querySelectorAll('.js-delivery-option-input');
 inputShippingButtons.forEach((inputShippingButton) => {
   inputShippingButton.addEventListener('click',(event) => {
-    let totalShippingCost = 0,shippingCost = 0, totalBeforeTax = 0;
-    let checkboxes = document.querySelectorAll('input[id="input"]:checked');//Get all the checked radio boxes
-    
-    //Add all the selected values
-    checkboxes.forEach((checkbox) => {
-      shippingCost = formatCurrency(Number(checkbox.value));
-      totalShippingCost += Number(shippingCost);
-    });
-
-    //Setting the total shipping cost in the HTML
-    document.querySelector('.js-shipping-cost').innerHTML = `$${totalShippingCost}`;
-
-    //Calculating total before tax(items cost + shipping)
-    totalBeforeTax = totalShippingCost + itemCost;
-
-    //Setting the total before tax in the HTML
-    document.querySelector('.js-total-before-tax').innerHTML = `$${totalBeforeTax.toFixed(2)}`;
-
-    //Calculating the tax(10 percent)
-    let taxAmount = (totalBeforeTax/10);
-    document.querySelector('.js-tax-amount').innerHTML = `$${taxAmount.toFixed(2)}`;
-
-    //Calculating the total cost
-    document.querySelector('.js-total-cost').innerHTML = `$${(totalBeforeTax + taxAmount).toFixed(2)}`;
+    setAllCosts(itemCost);
   });
 });
+
+function setAllCosts(itemCost)
+{
+  let totalShippingCost = 0,shippingCost = 0, totalBeforeTax = 0;
+  let checkboxes = document.querySelectorAll('input[id="input"]:checked');//Get all the checked radio boxes
+  
+  //Add all the selected values
+  checkboxes.forEach((checkbox) => {
+    shippingCost = formatCurrency(Number(checkbox.value));
+    totalShippingCost += Number(shippingCost);
+  });
+
+  //Setting the total shipping cost in the HTML
+  document.querySelector('.js-shipping-cost').innerHTML = `$${totalShippingCost}`;
+
+  //Calculating total before tax(items cost + shipping)
+  totalBeforeTax = totalShippingCost + itemCost;
+
+  //Setting the total before tax in the HTML
+  document.querySelector('.js-total-before-tax').innerHTML = `$${totalBeforeTax.toFixed(2)}`;
+
+  //Calculating the tax(10 percent)
+  let taxAmount = (totalBeforeTax/10);
+  document.querySelector('.js-tax-amount').innerHTML = `$${taxAmount.toFixed(2)}`;
+
+  //Calculating the total cost
+  document.querySelector('.js-total-cost').innerHTML = `$${(totalBeforeTax + taxAmount).toFixed(2)}`;
+}

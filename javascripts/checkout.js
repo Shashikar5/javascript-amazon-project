@@ -48,8 +48,8 @@ cart.forEach((product) => {
           </div>
           <div class="delivery-option">
             <input type="radio" checked
-              class="delivery-option-input"
-              name="delivery-option-${product.id}">
+              class="delivery-option-input js-delivery-option-input"
+              name="delivery-option-${product.id}" id="input" value="0" >
             <div>
               <div class="delivery-option-date">
                 Tuesday, June 21
@@ -61,8 +61,8 @@ cart.forEach((product) => {
           </div>
           <div class="delivery-option">
             <input type="radio"
-              class="delivery-option-input"
-              name="delivery-option-${product.id}">
+              class="delivery-option-input js-delivery-option-input"
+              name="delivery-option-${product.id}" id="input" value="499" >
             <div>
               <div class="delivery-option-date">
                 Wednesday, June 15
@@ -74,8 +74,8 @@ cart.forEach((product) => {
           </div>
           <div class="delivery-option">
             <input type="radio"
-              class="delivery-option-input"
-              name="delivery-option-${product.id}">
+              class="delivery-option-input js-delivery-option-input"
+              name="delivery-option-${product.id}" id="input" value="999" >
             <div>
               <div class="delivery-option-date">
                 Monday, June 13
@@ -130,3 +130,54 @@ function displayCartQuantityInHeader(){
   document.querySelector('.js-return-to-home-link').innerHTML = `${cartQuantity} Items`;
 }
 
+//Total Items Cost Logic(No tax and shipping included) 
+let itemCost = 0;
+cart.forEach((cartItem) => {
+  let productId = cartItem.id;
+  let product = findProduct(productId);
+  let productCost = formatCurrency(product.priceCents);
+  itemCost += (productCost * cartItem.quantity);
+});
+//Setting the items cost
+document.querySelector('.js-items-cost').innerHTML = `$${itemCost.toFixed(2)}`;
+//When shipping rates are free, total-before-tax = items-cost
+document.querySelector('.js-total-before-tax').innerHTML = `$${itemCost.toFixed(2)}`;
+//Calculating the tax(10 percent)
+let taxAmount = (itemCost/10);
+document.querySelector('.js-tax-amount').innerHTML = `$${taxAmount.toFixed(2)}`;
+
+
+
+//Cost logic - when radio buttons are clicked(Shipping dates are selected)
+/* Get all the input radio buttons then forEach loop the buttons.After that use addEventListener(Closure Method)
+  when clicked, get all the selected radio buttons and add their values
+*/
+let inputShippingButtons = document.querySelectorAll('.js-delivery-option-input');
+inputShippingButtons.forEach((inputShippingButton) => {
+  inputShippingButton.addEventListener('click',(event) => {
+    let totalShippingCost = 0,shippingCost = 0, totalBeforeTax = 0;
+    let checkboxes = document.querySelectorAll('input[id="input"]:checked');//Get all the checked radio boxes
+    
+    //Add all the selected values
+    checkboxes.forEach((checkbox) => {
+      shippingCost = formatCurrency(Number(checkbox.value));
+      totalShippingCost += Number(shippingCost);
+    });
+
+    //Setting the total shipping cost in the HTML
+    document.querySelector('.js-shipping-cost').innerHTML = `$${totalShippingCost}`;
+
+    //Calculating total before tax(items cost + shipping)
+    totalBeforeTax = totalShippingCost + itemCost;
+
+    //Setting the total before tax in the HTML
+    document.querySelector('.js-total-before-tax').innerHTML = `$${totalBeforeTax.toFixed(2)}`;
+
+    //Calculating the tax(10 percent)
+    let taxAmount = (totalBeforeTax/10);
+    document.querySelector('.js-tax-amount').innerHTML = `$${taxAmount.toFixed(2)}`;
+
+    //Calculating the total cost
+    document.querySelector('.js-total-cost').innerHTML = `$${(totalBeforeTax + taxAmount).toFixed(2)}`;
+  });
+});

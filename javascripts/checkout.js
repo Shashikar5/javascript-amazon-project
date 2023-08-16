@@ -190,6 +190,8 @@ function setAllCosts(itemCost)
 
   //Calculating the total cost
   document.querySelector('.js-total-cost').innerHTML = `$${(totalBeforeTax + taxAmount).toFixed(2)}`;
+
+  //return (totalBeforeTax + taxAmount).toFixed(2);
 }
 
 function setItemsCost()

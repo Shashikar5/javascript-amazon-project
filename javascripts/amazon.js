@@ -85,6 +85,8 @@ products.forEach((product) => {
 // Inserting the HTML 
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
+caculateTotalCartQuantity();
+
 
 /* 
     Syntax for data attribute
@@ -131,9 +133,8 @@ function displayAddedText(productId){
     },1000);
 }
 
-function caculateTotalCartQuantity(){
+export function caculateTotalCartQuantity(){
     let cartQuantity = caculateCartQuantity();
-    
     //Setting the cart quantity in the header
     document.querySelector('.js-cart-quantity').innerText = cartQuantity;
 }

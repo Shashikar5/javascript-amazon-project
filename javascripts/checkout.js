@@ -1,4 +1,4 @@
-import {products} from '../data/products.js';
+import {findProduct} from '../data/products.js';
 import {formatCurrency } from './utils/cost.js';
 import { cart, removeProductFromCart, caculateCartQuantity} from '../data/cart.js';
 
@@ -99,16 +99,6 @@ displayCartQuantityInHeader();
 //Setting the HTML in the checkout page(For Products)
 document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
 
-//This function will find the product from products array only using the productId
-function findProduct(productId){
-  let requiredProduct;
-  products.forEach((product) => {
-    if(productId === product.id){
-      requiredProduct = product;
-    }
-  });
-  return requiredProduct;
-}
 
 //Using closure method and dataset attribute - for delete button(Similar logic to add to cart button)
 let deleteButtons = document.querySelectorAll('.js-delete-link');
@@ -130,8 +120,9 @@ deleteButtons.forEach((deleteButton) => {
     //Setting the items cost
     document.querySelector('.js-items-cost').innerHTML = `$${itemCost.toFixed(2)}`;
 
-    //Set all other costs in the starting - when shipping rates are 0
-    setAllCosts(itemCost);
+    let cartCost = setAllCosts(itemCost);
+    /* We need the total cost in the orders.HTML page so saving it in local storage - when deleting*/
+    localStorage.setItem('totalCartCost',JSON.stringify(cartCost));
   });
 });
 
@@ -150,7 +141,9 @@ let itemCost = setItemsCost();
 document.querySelector('.js-items-cost').innerHTML = `$${itemCost.toFixed(2)}`;
 
 //Set all other costs in the starting - when shipping rates are 0
-setAllCosts(itemCost);
+let cartCost = setAllCosts(itemCost);
+/* We need the total cost in the orders.HTML page so saving it in local storage*/
+localStorage.setItem('totalCartCost',JSON.stringify(cartCost));
 
 
 //Cost logic - when radio buttons are clicked(Shipping dates are selected)
@@ -160,7 +153,9 @@ setAllCosts(itemCost);
 let inputShippingButtons = document.querySelectorAll('.js-delivery-option-input');
 inputShippingButtons.forEach((inputShippingButton) => {
   inputShippingButton.addEventListener('click',(event) => {
-    setAllCosts(itemCost);
+    let cartCost = setAllCosts(itemCost);
+    /* We need the total cost in the orders.HTML page so saving it in local storage - When changing the shipping rates*/
+    localStorage.setItem('totalCartCost',JSON.stringify(cartCost));
   });
 });
 
@@ -191,7 +186,7 @@ function setAllCosts(itemCost)
   //Calculating the total cost
   document.querySelector('.js-total-cost').innerHTML = `$${(totalBeforeTax + taxAmount).toFixed(2)}`;
 
-  //return (totalBeforeTax + taxAmount).toFixed(2);
+  return (totalBeforeTax + taxAmount).toFixed(2);
 }
 
 function setItemsCost()

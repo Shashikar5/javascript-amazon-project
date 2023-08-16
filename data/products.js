@@ -1,3 +1,15 @@
+ //This function will find the product from products array only using the productId
+ export function findProduct(productId)
+  {
+    let requiredProduct;
+    products.forEach((product) => {
+      if(productId === product.id){
+        requiredProduct = product;
+      }
+    });
+    return requiredProduct;
+  }
+ 
  export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",

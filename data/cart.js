@@ -61,7 +61,13 @@ export function caculateCartQuantity(){
   return cartQuantity;
 }
 
+export let totalCartCost = JSON.parse(localStorage.getItem('totalCartCost')) || 0;
 
+export function deleteAllProductsFromCart(){
+  let newCart = [];
+  cart = newCart;
+  saveToLocalStorage();
+}
 
 
 

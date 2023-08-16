@@ -3,10 +3,6 @@ import {findProduct} from '../data/products.js';
 
 /* Don't try to export module files, you will get error. Only export data files and function files*/
 
-//For displaying cart quantity in the header - orders.html page
-let cartQuantity = caculateCartQuantity();
-document.querySelector('.js-cart-quantity-orders').innerHTML = cartQuantity;
-
 let ordersHTML = `
   <div class="order-header">
     <div class="order-header-left-section">
@@ -50,7 +46,7 @@ cart.forEach((cartItem) => {
       ${product.name}
     </div>
     <div class="product-delivery-date">
-      Arriving on: August 15
+      Arriving on: ${cartItem.shippingDate}
     </div>
     <div class="product-quantity">
       Quantity: ${cartItem.quantity}
@@ -77,4 +73,8 @@ document.querySelector('.order-details-grid').innerHTML = orderSummaryHTML;
 //After displaying the orders in the orders.html page, delete the existing cart
 deleteAllProductsFromCart();
 //console.log(cart);
+
+//For displaying cart quantity in the header - orders.html page(Must be zero after placing order)
+let cartQuantity = caculateCartQuantity();
+document.querySelector('.js-cart-quantity-orders').innerHTML = cartQuantity;
 

@@ -11,7 +11,8 @@ export function addToCart(productId, quantityPerItem){
   {
     cart.push({
       id: productId,
-      quantity: quantityPerItem
+      quantity: quantityPerItem,
+      shippingDate: 'June 21'
     });
   } 
   else 
@@ -67,6 +68,26 @@ export function deleteAllProductsFromCart(){
   let newCart = [];
   cart = newCart;
   saveToLocalStorage();
+}
+
+export function saveShippingDatesToCart(){
+  cart.forEach((cartItem) => {
+    let checkedBox = document.querySelector(`input[name="delivery-option-${cartItem.id}"]:checked`);
+    if(checkedBox.value === '0')
+    {
+      cartItem.shippingDate = 'June 21';
+    }
+    else if(checkedBox.value === '499')
+    {
+      cartItem.shippingDate = 'June 15';
+    }
+    else if(checkedBox.value === '999')
+    {
+      cartItem.shippingDate = 'June 13';
+    }
+  });
+  saveToLocalStorage();
+  //console.log(cart);
 }
 
 

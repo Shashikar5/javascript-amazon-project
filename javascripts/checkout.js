@@ -1,6 +1,6 @@
 import {findProduct} from '../data/products.js';
 import {formatCurrency } from './utils/cost.js';
-import { cart, removeProductFromCart, caculateCartQuantity} from '../data/cart.js';
+import { cart, removeProductFromCart, caculateCartQuantity, saveShippingDatesToCart} from '../data/cart.js';
 
 let cartSummaryHTML = '';
 
@@ -145,6 +145,8 @@ let cartCost = setAllCosts(itemCost);
 /* We need the total cost in the orders.HTML page so saving it in local storage*/
 localStorage.setItem('totalCartCost',JSON.stringify(cartCost));
 
+//Set the shipping dates for each product in the cart
+saveShippingDatesToCart();
 
 //Cost logic - when radio buttons are clicked(Shipping dates are selected)
 /* Get all the input radio buttons then forEach loop the buttons.After that use addEventListener(Closure Method)
@@ -156,6 +158,9 @@ inputShippingButtons.forEach((inputShippingButton) => {
     let cartCost = setAllCosts(itemCost);
     /* We need the total cost in the orders.HTML page so saving it in local storage - When changing the shipping rates*/
     localStorage.setItem('totalCartCost',JSON.stringify(cartCost));
+
+    //Set the shipping dates for each product in the cart
+    saveShippingDatesToCart();
   });
 });
 

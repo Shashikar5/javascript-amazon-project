@@ -1,4 +1,5 @@
-import { caculateCartQuantity, cart, totalCartCost, deleteAllProductsFromCart} from "../data/cart.js";
+import { caculateCartQuantity, cart, totalCartCost, deleteAllProductsFromCart, 
+  addToCart} from "../data/cart.js";
 import {findProduct} from '../data/products.js';
 
 /* Don't try to export module files, you will get error. Only export data files and function files*/
@@ -51,7 +52,7 @@ cart.forEach((cartItem) => {
     <div class="product-quantity">
       Quantity: ${cartItem.quantity}
     </div>
-    <button class="buy-again-button button-primary">
+    <button class="buy-again-button button-primary js-buy-again-button" data-product-id="${product.id}" data-cart-quantity="${cartItem.quantity}" >
       <img class="buy-again-icon" src="images/icons/buy-again.png">
       <span class="buy-again-message">Buy it again</span>
     </button>
@@ -78,3 +79,18 @@ deleteAllProductsFromCart();
 let cartQuantity = caculateCartQuantity();
 document.querySelector('.js-cart-quantity-orders').innerHTML = cartQuantity;
 
+//Buy it again button Logic(Using closure method)
+let totalCartQuantity = 0;
+let buyAgainButtons = document.querySelectorAll('.js-buy-again-button');
+buyAgainButtons.forEach((buyAgainButton) => {
+  buyAgainButton.addEventListener('click',() => {
+    //Add to cart logic
+    let productId = buyAgainButton.dataset.productId;
+    let quantity = buyAgainButton.dataset.cartQuantity;
+    addToCart(productId, quantity);
+
+    //Calculating the total cart qauntity and displaying it in the header
+    totalCartQuantity += Number(quantity);
+    document.querySelector('.js-cart-quantity-orders').innerHTML = totalCartQuantity;
+  });
+});

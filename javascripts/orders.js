@@ -60,10 +60,10 @@ cart.forEach((cartItem) => {
 
   <div class="product-actions">
     <a href="tracking.html">
-      <button class="track-package-button button-secondary">
+      <button class="track-package-button button-secondary js-track-package" data-product-id="${product.id}" data-cart-quantity="${cartItem.quantity}" data-cart-shipping-date="${cartItem.shippingDate}">
         Track package
-      </button>
-    </a>
+      </button>  
+		</a>
   </div>
   `;
 });
@@ -72,7 +72,7 @@ cart.forEach((cartItem) => {
 document.querySelector('.order-details-grid').innerHTML = orderSummaryHTML;
 
 //After displaying the orders in the orders.html page, delete the existing cart
-deleteAllProductsFromCart();
+//deleteAllProductsFromCart();
 //console.log(cart);
 
 //For displaying cart quantity in the header - orders.html page(Must be zero after placing order)
@@ -92,5 +92,54 @@ buyAgainButtons.forEach((buyAgainButton) => {
     //Calculating the total cart qauntity and displaying it in the header
     totalCartQuantity += Number(quantity);
     document.querySelector('.js-cart-quantity-orders').innerHTML = totalCartQuantity;
+  });
+});
+
+//Getting the track package buttons using closure method
+let trackProductHTML = '';
+let trackPackageButtons = document.querySelectorAll('.js-track-package');
+trackPackageButtons.forEach((trackPackageButton) => {
+  trackPackageButton.addEventListener('click',() => {
+    let productId = trackPackageButton.dataset.productId;
+    let quantity = trackPackageButton.dataset.cartQuantity;
+    let shippingDate = trackPackageButton.dataset.cartShippingDate;
+    let product = findProduct(productId);
+    trackProductHTML = `
+      <a class="back-to-orders-link link-primary" href="orders.html">
+        View all orders
+      </a>
+
+      <div class="delivery-date">
+        Arriving on Monday, ${shippingDate}
+      </div>
+
+      <div class="product-info">
+        ${product.name}
+      </div>
+
+      <div class="product-info">
+        Quantity: ${quantity}
+      </div>
+
+      <img class="product-image" src="${product.image}">
+
+      <div class="progress-labels-container">
+        <div class="progress-label">
+          Preparing
+        </div>
+        <div class="progress-label current-status">
+          Shipped
+        </div>
+        <div class="progress-label">
+          Delivered
+        </div>
+      </div>
+
+      <div class="progress-bar-container">
+        <div class="progress-bar"></div>
+      </div>
+    `;
+    //Saving the product data in local storage to display it in the tracking.html page
+    localStorage.setItem('trackProduct',JSON.stringify(trackProductHTML));
   });
 });

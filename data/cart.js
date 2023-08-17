@@ -37,7 +37,7 @@ function increaseQuantity(productId, quantityPerItem){
   cart.forEach((product) => {
     if(product.id === productId)
     {
-      product.quantity += quantityPerItem;
+      product.quantity += Number(quantityPerItem);
     }
   })
 }
@@ -89,6 +89,8 @@ export function saveShippingDatesToCart(){
   saveToLocalStorage();
   //console.log(cart);
 }
+
+export let trackProductCartHTML = JSON.parse(localStorage.getItem('trackProduct')) || '';
 
 
 
